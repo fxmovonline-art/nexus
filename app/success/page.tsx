@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
 
@@ -18,6 +18,7 @@ interface ConfirmResponse {
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('Processing your payment...');
   const [investmentData, setInvestmentData] = useState<any>(null);
@@ -38,8 +39,10 @@ function SuccessContent() {
           return;
         }
 
-        // Get token from localStorage
+        // Get token and user type from localStorage
         const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        
         if (!token) {
           setStatus('error');
           setMessage('Not authenticated. Please login again.');
@@ -70,6 +73,25 @@ function SuccessContent() {
           setStatus('success');
           setMessage('Payment successful! Your investment has been recorded.');
           setInvestmentData(data.investment);
+
+          // Determine redirect path based on user type
+          let redirectPath = '/dashboard/investor';
+          try {
+            const user = userStr ? JSON.parse(userStr) : null;
+            if (user?.userType === 'entrepreneur') {
+              redirectPath = '/dashboard/entrepreneur';
+            } else if (user?.userType === 'investor') {
+              redirectPath = '/dashboard/investor';
+            }
+          } catch (e) {
+            console.log('[Success Page] Could not parse user type, defaulting to investor dashboard');
+          }
+
+          // Redirect after 1.5 seconds to show success message briefly
+          console.log('[Success Page] Redirecting to', redirectPath);
+          setTimeout(() => {
+            router.push(redirectPath);
+          }, 1500);
         } else {
           setStatus('error');
           setMessage(data.error || data.message || 'Failed to confirm payment');
@@ -82,7 +104,7 @@ function SuccessContent() {
     };
 
     confirmPayment();
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   if (status === 'loading') {
     return (
