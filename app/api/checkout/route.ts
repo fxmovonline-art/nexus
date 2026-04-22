@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
     
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

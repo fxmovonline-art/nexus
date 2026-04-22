@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
 
@@ -18,7 +18,6 @@ interface ConfirmResponse {
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('Processing your payment...');
   const [investmentData, setInvestmentData] = useState<any>(null);
@@ -55,6 +54,8 @@ function SuccessContent() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
+          credentials: 'same-origin',
+          cache: 'no-store',
           body: JSON.stringify({
             sessionId,
             startupId,

@@ -3,6 +3,8 @@ import stripe from '@/lib/stripe';
 import prisma from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 interface JwtPayload {
   id: string;
   email?: string;
