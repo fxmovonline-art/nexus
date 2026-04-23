@@ -365,7 +365,7 @@ export default function EntrepreneurDashboardPage() {
               <div className="space-y-6">
                 <div>
                   <p className="text-sm text-gray-600 mb-2 font-medium">About</p>
-                  <p className="text-gray-900 leading-relaxed">{startup.description}</p>
+                  <p className="text-gray-900 leading-relaxed break-words whitespace-normal">{startup.description}</p>
                 </div>
 
                 {startup.website && (

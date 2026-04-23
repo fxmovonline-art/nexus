@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useSidebar } from '@/components/dashboard/SidebarContext';
 
 interface User {
   name: string;
@@ -64,12 +66,26 @@ export default function Header({ user: defaultUser }: HeaderProps) {
     ? '/dashboard/entrepreneur'
     : '/dashboard/investor';
 
+  const { sidebarOpen, setSidebarOpen } = useSidebar();
+
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-      <div className="px-8 py-4 flex items-center justify-between">
+      <div className="px-4 sm:px-8 py-4 flex items-center justify-between gap-4">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+          aria-label="Toggle menu"
+        >
+          {sidebarOpen ? (
+            <X className="w-6 h-6 text-gray-700" />
+          ) : (
+            <Menu className="w-6 h-6 text-gray-700" />
+          )}
+        </button>
 
-        {/* Center: Navigation */}
-        <nav className="flex items-center gap-8">
+        {/* Center: Navigation - hidden on mobile */}
+        <nav className="hidden sm:flex items-center gap-4 sm:gap-8 flex-1">
           <Link
             href={dashboardLink}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium text-sm"
@@ -91,22 +107,22 @@ export default function Header({ user: defaultUser }: HeaderProps) {
         </nav>
 
         {/* Right: Profile Section */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
           <Link
             href="/dashboard/profile"
-            className="text-gray-600 hover:text-gray-900 font-medium text-sm"
+            className="hidden sm:block text-gray-600 hover:text-gray-900 font-medium text-sm"
           >
             👤 Profile
           </Link>
-          <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 font-medium text-sm">
+          <Link href="/auth/login" className="hidden sm:block text-gray-600 hover:text-gray-900 font-medium text-sm">
             🚪 Logout
           </Link>
 
-          <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
+          <div className="flex items-center gap-2 sm:gap-3 sm:pl-6 sm:border-l sm:border-gray-200">
             <div className="w-9 h-9 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
               {user.initials}
             </div>
-            <span className="text-sm font-semibold text-gray-900 whitespace-nowrap">{user.name}</span>
+            <span className="hidden sm:inline text-sm font-semibold text-gray-900 whitespace-nowrap">{user.name}</span>
           </div>
         </div>
       </div>

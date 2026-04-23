@@ -80,7 +80,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md px-4 sm:px-0">
       <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xl">
